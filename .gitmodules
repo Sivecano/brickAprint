@@ -1,3 +1,6 @@
 [submodule "Tweaker-3"]
 	path = Tweaker-3
 	url = https://github.com/ChristophSchranz/Tweaker-3.git
+[submodule "ldraw2stl"]
+	path = ldraw2stl
+	url = https://github.com/kristov/ldraw2stl
