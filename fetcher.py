@@ -42,7 +42,7 @@ class CacheMGR:
                 pass
         self.cache_dir = cache_dir
         self.cache_list = open(cache_dir + os.sep + "cachelist.txt", 'r+')
-        self.cached_parts = [int(p) for p in self.cache_list.readlines()]
+        self.cached_parts = [p.strip() for p in self.cache_list.readlines()]
 
     def query_cache_for_part(self, part_number: int):
         return part_number in self.cached_parts
@@ -54,7 +54,7 @@ class CacheMGR:
         print(f'downloaded {number_of_downloaded_parts} parts')
 
 
-    def get_part(self, model_number: int):
+    def get_part(self, model_number: str):
         if not self.query_cache_for_part(model_number):
             try:
                 r = requests.get(url=f'https://www.ldraw.org/library/official/parts/{model_number}.dat')
