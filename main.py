@@ -6,6 +6,7 @@ def convert_to_stl(parts: list, stldir : str):
     os.system('chmod +x ldraw2stl/bin/dat2stl')
     for part in parts:
         os.system(f'./ldraw2stl/bin/dat2stl --file model_cache/{part}.dat --ldrawdir ./ldraw --scale 1 > {stldir}/{part}.stl')
+        
 
 def tweak_parts(parts: list, stldir : str):
     for part in parts:
@@ -13,6 +14,11 @@ def tweak_parts(parts: list, stldir : str):
         if os.path.exists(path):
             if os.path.getsize(path) > 4:
                 stlconverter.tweak_file(f"{stldir}/{part}.stl")
+
+                
+def repair_stl(parts: list, stldir: str):
+    for part in parts:
+        os.system("slic3r --repair --export-stl" + os.path.join(stldir, f"{part}.stl")
 
 def get_set(set_number : str):
     print("fetching partlist")
@@ -37,6 +43,10 @@ def get_set(set_number : str):
     print("converting parts...")
     convert_to_stl(numbers, stldir)
     print("done converting parts to stl")
+    print("checking and repairing parts...")
+    repair_stl(numbers, stldir)
+    print("all parts fixed")
+                  
     if input("do you want to automatically tweak part orientation? [y/N]").lower().startswith("y"):
         print("begin tweaking")
         tweak_parts(numbers, stldir)
@@ -46,7 +56,7 @@ def get_set(set_number : str):
 
     print("\nall done :)")
 
-        
+       
 
 if __name__ == "__main__":
     print("Welcome to BrickAPrint :)")

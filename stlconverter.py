@@ -28,7 +28,7 @@ def tweak_file(path):
         x = Tweak(mesh, True, False, True, None, True)
         info[part]["matrix"] = x.matrix
         info[part]["tweaker_stats"] = x
-        print("unprintability:", x.unprintability )
+        #print("unprintability:", x.unprintability )
 
     try:
         fileHandler.write_mesh(objs, info, path, "binarystl")
