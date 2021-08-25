@@ -30,9 +30,9 @@ def tweak_file(path):
         print("unprintability:", x.unprintability )
 
     try:
-        FileHandler.write_mesh(objs, info, path, "binarystl")
+        fileHandler.write_mesh(objs, info, path, "binarystl")
     except FileNotFoundError:
         raise FileNotFoundError("WTF? couldn't output")
 
 if __name__ == "__main__":
-    tweak_file("test.stl")
+    tweak_file("test2.stl")
