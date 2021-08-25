@@ -9,11 +9,13 @@ def convert_to_stl(parts: list, stldir : str):
 
 def tweak_parts(parts: list, stldir : str):
     for part in parts:
-        stlconverter.tweak_file(f"{stldir}/{part}.stl")
+        if os.path.exists(f"{stldir}/{part}.stl"):
+            stlconverter.tweak_file(f"{stldir}/{part}.stl")
 
 def get_set(set_number : str):
     print("fetching partlist")
     parts = fetcher.get_partlist(set_number)
+    numbers = parts["part_num"].tolist()
     print("partlist: ")
     print(parts)
     
@@ -27,15 +29,15 @@ def get_set(set_number : str):
 
     manager = fetcher.CacheMGR("model_cache")
     print("downloading parts...")
-    manager.get_parts(parts["part_num"].tolist())
+    manager.get_parts(numbers)
     print("downloaded parts")
     
     print("converting parts...")
-    convert_to_stl(parts, stldir)
+    convert_to_stl(numbers, stldir)
     print("done converting parts to stl")
     if input("do you want to automatically tweak part orientation? [y/N]").lower().startswith("y"):
         print("begin tweaking")
-        tweak_parts(parts, stldir)
+        tweak_parts(numbers, stldir)
         print("finished tweaking")
         
     parts.to_csv(os.path.join(outdir, f"{set_number}_part_list.csv"))
