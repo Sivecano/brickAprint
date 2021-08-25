@@ -24,7 +24,8 @@ def tweak_file(path):
     for part, content in objs.items():
         mesh = content["mesh"]
         info[part] = {}
-        x = Tweak(mesh, False, False, False, False, True)
+        # mesh, extended_mode, vebose, show_progress, favside, minimize volume?
+        x = Tweak(mesh, True, False, True, None, True)
         info[part]["matrix"] = x.matrix
         info[part]["tweaker_stats"] = x
         print("unprintability:", x.unprintability )
@@ -35,4 +36,4 @@ def tweak_file(path):
         raise FileNotFoundError("WTF? couldn't output")
 
 if __name__ == "__main__":
-    tweak_file("test2.stl")
+    tweak_file("test.stl")

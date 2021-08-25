@@ -1,4 +1,4 @@
-import requests, json
+import requests, json, os
 import pandas
 
 
@@ -26,8 +26,11 @@ def get_partlist(set):
 
 class CacheMGR:
     def __init__(self, cache_dir='model_cache'):
+        if (not os.path.exists(cache_dir + os.sep + "cachelist.txt")):
+            with open(cache_dir + os.sep + "cachelist.txt", "w") as f:
+                pass
         self.cache_dir = cache_dir
-        self.cache_list = open('model_cache/cachelist.txt', 'r+')
+        self.cache_list = open(cache_dir + os.sep + "cachelist.txt", 'r+')
         self.cached_parts = [int(p) for p in self.cache_list.readlines()]
 
     def query_cache_for_part(self, part_number: int):
