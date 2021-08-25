@@ -18,7 +18,7 @@ def tweak_parts(parts: list, stldir : str):
                 
 def repair_stl(parts: list, stldir: str):
     for part in parts:
-        os.system("slic3r --repair --export-stl" + os.path.join(stldir, f"{part}.stl")
+        os.system("slic3r --repair --export-stl" + os.path.join(stldir, f"{part}.stl"))
 
 def get_set(set_number : str):
     print("fetching partlist")
