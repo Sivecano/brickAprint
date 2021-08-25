@@ -2,7 +2,7 @@ import requests, json, os
 import pandas
 
 
-def get_partlist(set):
+def get_partlist(set : str):
     with open("key.txt", "r") as f:
         url = f"https://rebrickable.com/api/v3/lego/sets/{set}/parts/?key=" + f.read().strip()
 
@@ -12,20 +12,31 @@ def get_partlist(set):
         parts = json.loads(requests.get(url).text)
 
         for i in range(min(parts["count"] - readcount * 100, 100)):
+            
+            if ("LEGO" in parts["results"][i]["color"]["external_ids"]):
+                coloursource = "LEGO"
+            elif "LDraw" in parts["results"][i]["color"]["external_ids"]:
+                coloursource = "LDraw"
+            else:
+                coloursource = list(parts["results"][i]["color"]["external_ids"])[0]
+            
+            
             out.append({"quantity" : parts["results"][i]["quantity"],
                         "part_num" : parts["results"][i]["part"]["part_num"],
-                        "colours" : [b[0] for b in parts["results"][i]["color"]["external_ids"]["LDraw"]["ext_descrs"]]})
+                        "colours" : [b[0] for b in parts["results"][i]["color"]["external_ids"][coloursource]["ext_descrs"]]})
         if parts["next"] is None:
             break
         url = parts["next"]
         readcount += 1
 
     return pandas.DataFrame(out)
-    
 
 
 class CacheMGR:
     def __init__(self, cache_dir='model_cache'):
+        if not os.path.exists(cache_dir):
+            os.mkdir(cache_dir)
+        
         if (not os.path.exists(cache_dir + os.sep + "cachelist.txt")):
             with open(cache_dir + os.sep + "cachelist.txt", "w") as f:
                 pass
@@ -74,4 +85,5 @@ class CacheMGR:
 
 if __name__ == "__main__":
     print(get_partlist("21045-1"))
+    
     CacheMGR().get_parts([73230])
