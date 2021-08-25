@@ -9,8 +9,10 @@ def convert_to_stl(parts: list, stldir : str):
 
 def tweak_parts(parts: list, stldir : str):
     for part in parts:
-        if os.path.exists(f"{stldir}/{part}.stl"):
-            stlconverter.tweak_file(f"{stldir}/{part}.stl")
+        path = os.path.join(stldir, f"{part}.stl")
+        if os.path.exists(path):
+            if os.path.getsize(path) > 4:
+                stlconverter.tweak_file(f"{stldir}/{part}.stl")
 
 def get_set(set_number : str):
     print("fetching partlist")
