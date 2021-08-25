@@ -5,7 +5,9 @@ import stlconverter
 def convert_to_stl(parts: list, stldir : str):
     os.system('chmod +x ldraw2stl/bin/dat2stl')
     for part in parts:
-        os.system(f'./ldraw2stl/bin/dat2stl --file model_cache/{part}.dat --ldrawdir ./ldraw --scale 1 > {stldir}/{part}.stl')
+        path = os.path.join(stldir,part)
+        os.system(f'./ldraw2stl/bin/dat2stl --file model_cache/{part}.dat --ldrawdir ./ldraw --scale 1 > {path}.stlp')
+        
         
 
 def tweak_parts(parts: list, stldir : str):
@@ -18,7 +20,8 @@ def tweak_parts(parts: list, stldir : str):
                 
 def repair_stl(parts: list, stldir: str):
     for part in parts:
-        os.system("slic3r --repair --export-stl" + os.path.join(stldir, f"{part}.stl"))
+        path = os.path.join(stldir,part)
+        os.system(f"prusa-slicer --export-stl --repair {path}.stl")
 
 def get_set(set_number : str):
     print("fetching partlist")
