@@ -39,18 +39,28 @@ class CacheMGR:
         print(f'downloaded {number_of_downloaded_parts} parts')
 
 
-    def get_part(self, part_number: int):
-        if not self.query_cache_for_part(part_number):
+    def get_part(self, model_number: int):
+        if not self.query_cache_for_part(model_number):
             try:
-                r = requests.get(url=f'https://www.ldraw.org/library/official/parts/{part_number}.dat')
+                r = requests.get(url=f'https://www.ldraw.org/library/official/parts/{model_number}.dat')
                 assert r.status_code == 200, 'Brick Acquisition Error'
-                with open(f'model_cache/{part_number}.dat', 'w+') as f:
+                with open(f'model_cache/{model_number}.dat', 'w+') as f:
                     f.write(r.text)
-                self.cached_parts.append(part_number)
-                self.cache_list.write(f'{part_number}\n')
+                self.cached_parts.append(model_number)
+                self.cache_list.write(f'{model_number}\n')
                 return 1
             except AssertionError:
-                print(f'could not get brick model {part_number}')
+                try:
+                    r = requests.get(url=f'https://www.ldraw.org/library/unofficial/parts/{model_number}.dat')
+                    assert r.status_code == 200, 'Brick Acquisition Error'
+                    with open(f'model_cache/{model_number}.dat', 'w+') as f:
+                        f.write(r.text)
+                    self.cached_parts.append(model_number)
+                    self.cache_list.write(f'{model_number}\n')
+                    print(f'got part nr. {model_number} from unofficial list')
+                    return 1
+                except AssertionError:
+                    print(f'could not get brick model {model_number}')
         return 0
 
 
@@ -60,4 +70,4 @@ class CacheMGR:
 
 if __name__ == "__main__":
     print(get_partlist("21045-1"))
-    CacheMGR().get_parts([3894])
+    CacheMGR().get_parts([73230])
