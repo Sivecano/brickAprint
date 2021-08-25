@@ -4,7 +4,7 @@ import pandas
 
 def get_partlist(set):
     with open("key.txt", "r") as f:
-        url = "https://rebrickable.com/api/v3/lego/sets/" + set + "/parts/?key=" + f.read().strip()
+        url = f"https://rebrickable.com/api/v3/lego/sets/{set}/parts/?key=" + f.read().strip()
 
     readcount = 0
     out = []

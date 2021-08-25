@@ -1,6 +1,6 @@
 import os, importlib
 
-path = "Tweaker-3" + os.sep + "__init__.py"
+path = f"Tweaker-3{os.sep}__init__.py"
 
 if not os.path.exists(path):
     with open(path, "w") as f:
@@ -36,4 +36,4 @@ def tweak_file(path):
         raise FileNotFoundError("WTF? couldn't output")
 
 if __name__ == "__main__":
-    tweak_file("test.stl")
+    tweak_file("6541.stl")
