@@ -4,3 +4,6 @@
 [submodule "ldraw2stl"]
 	path = ldraw2stl
 	url = https://github.com/kristov/ldraw2stl
+[submodule "Cura-CLI-Wrapper"]
+	path = Cura-CLI-Wrapper
+	url = https://github.com/Spiritdude/Cura-CLI-Wrapper

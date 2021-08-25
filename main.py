@@ -6,7 +6,7 @@ def convert_to_stl(parts: list, stldir : str):
     os.system('chmod +x ldraw2stl/bin/dat2stl')
     for part in parts:
         path = os.path.join(stldir,part)
-        os.system(f'./ldraw2stl/bin/dat2stl --file model_cache/{part}.dat --ldrawdir ./ldraw --scale 1 > {path}.stlp')
+        os.system(f'./ldraw2stl/bin/dat2stl --file model_cache/{part}.dat --ldrawdir ./ldraw --scale 1 > {path}.stl')
         
         
 
@@ -50,7 +50,7 @@ def get_set(set_number : str):
     repair_stl(numbers, stldir)
     print("all parts fixed")
                   
-    if input("do you want to automatically tweak part orientation? [y/N]").lower().startswith("y"):
+    if input("do you want to automatically tweak part orientation? [y/N] ").lower().startswith("y"):
         print("begin tweaking")
         tweak_parts(numbers, stldir)
         print("finished tweaking")
@@ -58,6 +58,8 @@ def get_set(set_number : str):
     parts.to_csv(os.path.join(outdir, f"{set_number}_part_list.csv"))
 
     print("\nall done :)")
+
+    
 
        
 
