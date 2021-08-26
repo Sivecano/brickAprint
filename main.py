@@ -21,7 +21,7 @@ def tweak_parts(parts: list, stldir : str):
 def repair_stl(parts: list, stldir: str):
     for part in parts:
         path = os.path.join(stldir,part)
-        os.system(f"prusa-slicer --export-stl --repair {path}.stl")
+        os.system(f"prusa-slicer --export-stl --repair --loglevel 2 {path}.stl")
 
 def get_set(set_number : str):
     print("fetching partlist")
