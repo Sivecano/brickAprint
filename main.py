@@ -1,4 +1,6 @@
 import os
+import subprocess
+
 import fetcher
 import stlconverter
 
@@ -6,7 +8,11 @@ def convert_to_stl(parts: list, stldir : str):
     os.system('chmod +x ldraw2stl/bin/dat2stl')
     for part in parts:
         path = os.path.join(stldir,part)
-        os.system(f'./ldraw2stl/bin/dat2stl --file model_cache/{part}.dat --ldrawdir ./ldraw --scale 1 > {path}.stl')
+        with open(os.devnull, 'wb') as devnull:
+            subprocess.check_call(['./ldraw2stl/bin/dat2stl',
+                                   '--file',f'model_cache/{part}.dat',
+                                   '--ldrawdir ','./ldraw',
+                                   '--scale','1','>',f'{path}.stl'], stdout=devnull, stderr=subprocess.STDOUT)
         
         
 
