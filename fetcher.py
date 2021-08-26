@@ -45,8 +45,9 @@ def get_moc(set : str):
     with open("key.txt", "r") as f:
          key = f.read().strip()
         
-    ind = text.find("/inventory")
-    loc = text[ind :text.find('"', ind)]
+    ind = text.find("RB.load_inventory")
+    ind = text.find('"',ind)
+    loc = text[ind + 1:text.find('"', ind + 1)]
     with requests.get(f"https://rebrickable.com{loc}parts/?format=rbpartscsv") as web:
         csv  = pandas.read_csv(StringIO(web.content.decode("utf-8")))
 
