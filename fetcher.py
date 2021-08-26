@@ -1,15 +1,20 @@
+
 import requests, json, os
 import pandas
+from io import StringIO
 
 
 def get_partlist(set : str):
+        
     with open("key.txt", "r") as f:
         url = f"https://rebrickable.com/api/v3/lego/sets/{set}/parts/?key=" + f.read().strip()
 
     readcount = 0
     out = []
     while True:
-        parts = json.loads(requests.get(url).text)
+        with requests.get(url) as web:
+            parts = json.loads(web.text)
+
 
         for i in range(min(parts["count"] - readcount * 100, 100)):
             
@@ -30,6 +35,21 @@ def get_partlist(set : str):
         readcount += 1
 
     return pandas.DataFrame(out)
+
+def get_moc(set : str):
+    with requests.get(f"https://rebrickable.com/mocs/{set}") as website:
+        text = website.text
+        
+    ind = text.find("RB.load_inventory")
+    ind = text.find('"',ind)
+    loc = text[ind + 1:text.find('"', ind + 1)]
+    with requests.get(f"https://rebrickable.com{loc}parts/?format=rbpartscsv") as web:
+        csv = web.content
+
+    print(pandas.read_csv(StringIO(csv.decode("utf-8"))))
+    
+    
+    
 
 
 class CacheMGR:
@@ -84,6 +104,7 @@ class CacheMGR:
 
 
 if __name__ == "__main__":
+    get_moc("MOC-73463")
     parts = get_partlist("21045-1")
     print(parts)
     
