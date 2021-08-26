@@ -1,4 +1,12 @@
 *.py#
 .#*
+*.md#
 key.txt
 *~
+*.dat
+*.stl
+*.csv
+model_cache/*
+*.obj
+*.gcode
+*.stl#
