@@ -84,6 +84,7 @@ class CacheMGR:
 
 
 if __name__ == "__main__":
-    print(get_partlist("21045-1"))
+    parts = get_partlist("21045-1")
+    print(parts)
     
     CacheMGR().get_parts([73230])

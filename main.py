@@ -54,11 +54,21 @@ def get_set(set_number : str):
         print("begin tweaking")
         tweak_parts(numbers, stldir)
         print("finished tweaking")
+
+    
         
     parts.to_csv(os.path.join(outdir, f"{set_number}_part_list.csv"))
 
     print("\nall done :)")
 
+    if (not input("do you want to open all required files in cura? [y/N] ").lower().startswith("y")):
+        return
+
+    numlist = []
+    for i in range(len(parts)):
+        numlist += parts.loc[i][0] * [f"{os.path.join(stldir, parts.loc[i][1])}.stl"]
+
+    os.system("cura " + " ".join(numlist))
     
 
        
