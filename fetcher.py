@@ -22,7 +22,7 @@ def get_partlist(set : str):
             
             
             out.append({"quantity" : parts["results"][i]["quantity"],
-                        "part_num" : parts["results"][i]["part"]["part_num"],
+                        "part_num" : parts["results"][i]["part"]["external_ids"]["LDraw"][0] if "LDraw" in parts["results"][i]["part"]["external_ids"].keys() else parts["results"][i]["part"]["part_num"] ,
                         "colours" : [b[0] for b in parts["results"][i]["color"]["external_ids"][coloursource]["ext_descrs"]]})
         if parts["next"] is None:
             break
