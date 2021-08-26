@@ -10,4 +10,5 @@ model_cache/*
 *.obj
 *.gcode
 *.stl#
-__pycache__/
+__pycache__/*
+*.pyc 
