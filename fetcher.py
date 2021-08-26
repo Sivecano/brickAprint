@@ -5,7 +5,10 @@ from io import StringIO
 
 
 def get_partlist(set : str):
-        
+
+    if set.startswith("MOC"):
+        return get_moc(set)
+    
     with open("key.txt", "r") as f:
         url = f"https://rebrickable.com/api/v3/lego/sets/{set}/parts/?key=" + f.read().strip()
 
@@ -57,27 +60,25 @@ def get_moc(set : str):
             colours = {**colours, **{res["id"] : res["name"] for res in content["results"]}}
             if (next := content["next"]) is None:
                break
-        
 
+    partnums = list(csv['Part'])
     out = []
-    url = f"https://rebrickable.com/api/v3/lego/parts/?part_nums={','.join(csv['Part'])}&key={key}"
     readcount = 0
 
-    print(url)
-
-    while True:
+    while len(partnums) > 0:
+        url = f"https://rebrickable.com/api/v3/lego/parts/?part_nums={','.join(partnums[:50])}&key={key}"
+        partnums = partnums[50:]
+        
         with requests.get(url) as web:
             parts = json.loads(web.text)
 
 
-        for i in range(min(parts["count"] - readcount * 100, 100)):
-            out.append({"quantity" : csv["Quantity"][100*readcount + i],
+        for i in range(parts["count"]):
+            out.append({"quantity" : csv["Quantity"][50*readcount + i],
                         "part_num" : parts["results"][i]["external_ids"]["LDraw"][0] if "LDraw" in parts["results"][i]["external_ids"].keys() else parts["results"][i]["part_num"] ,
-                        "colours" : colours[csv["Color"][100*readcount + i]] if csv["Color"][100*readcount + i] in colours else "None"})
-        if parts["next"] is None:
-            break
-        url = parts["next"]
+                        "colours" : colours[csv["Color"][50*readcount + i]] if csv["Color"][50*readcount + i] in colours else "None"})
         readcount += 1
+
         
     
     del csv
