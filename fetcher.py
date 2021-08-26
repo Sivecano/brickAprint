@@ -39,16 +39,49 @@ def get_partlist(set : str):
 def get_moc(set : str):
     with requests.get(f"https://rebrickable.com/mocs/{set}") as website:
         text = website.text
+    with open("key.txt", "r") as f:
+         key = f.read().strip()
         
     ind = text.find("RB.load_inventory")
     ind = text.find('"',ind)
     loc = text[ind + 1:text.find('"', ind + 1)]
     with requests.get(f"https://rebrickable.com{loc}parts/?format=rbpartscsv") as web:
-        csv = web.content
+        csv  = pandas.read_csv(StringIO(web.content.decode("utf-8")))
 
-    print(pandas.read_csv(StringIO(csv.decode("utf-8"))))
+    print(csv)
+    next = f"https://rebrickable.com/api/v3/lego/colors/?key={key}"
+    colours = {}
+    while True:
+        with requests.get(next) as web:
+            content = json.loads(web.text)
+            colours = {**colours, **{res["id"] : res["name"] for res in content["results"]}}
+            if (next := content["next"]) is None:
+               break
+        
+
+    out = []
+    url = f"https://rebrickable.com/api/v3/lego/parts/?part_nums={','.join(csv['Part'])}&key={key}"
+    readcount = 0
+
+    print(url)
+
+    while True:
+        with requests.get(url) as web:
+            parts = json.loads(web.text)
+
+
+        for i in range(min(parts["count"] - readcount * 100, 100)):
+            out.append({"quantity" : csv["Quantity"][100*readcount + i],
+                        "part_num" : parts["results"][i]["external_ids"]["LDraw"][0] if "LDraw" in parts["results"][i]["external_ids"].keys() else parts["results"][i]["part_num"] ,
+                        "colours" : colours[csv["Color"][100*readcount + i]] if csv["Color"][100*readcount + i] in colours else "None"})
+        if parts["next"] is None:
+            break
+        url = parts["next"]
+        readcount += 1
+        
     
-    
+    del csv
+    return pandas.DataFrame(out)
     
 
 
@@ -72,6 +105,8 @@ class CacheMGR:
         for p in part_list:
             number_of_downloaded_parts += self.get_part(p)
         print(f'downloaded {number_of_downloaded_parts} parts')
+
+    
 
 
     def get_part(self, model_number: str):
@@ -104,7 +139,7 @@ class CacheMGR:
 
 
 if __name__ == "__main__":
-    get_moc("MOC-73463")
+    print(get_moc("MOC-73463"))
     parts = get_partlist("21045-1")
     print(parts)
     
