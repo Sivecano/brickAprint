@@ -9,9 +9,9 @@ def convert_to_stl(parts: list, stldir : str):
     for part in parts:
         path = os.path.join(stldir,part)
         with open(os.devnull, 'wb') as devnull:
-            subprocess.check_call(['./ldraw2stl/bin/dat2stl',
-                                   '--file',f'model_cache/{part}.dat',
-                                   '--ldrawdir ','./ldraw',
+            subprocess.check_call([os.path.join(".", "ldraw2stl","bin","dat2stl"),
+                                   '--file',os.path.join('model_cache', f'{part}.dat'),
+                                   '--ldrawdir ',os.path.join('.','ldraw'),
                                    '--scale','1','>',f'{path}.stl'], stdout=devnull, stderr=subprocess.STDOUT)
         
         
@@ -21,7 +21,7 @@ def tweak_parts(parts: list, stldir : str):
         path = os.path.join(stldir, f"{part}.stl")
         if os.path.exists(path):
             if os.path.getsize(path) > 4:
-                stlconverter.tweak_file(f"{stldir}/{part}.stl")
+                stlconverter.tweak_file(os.path.join(f"{stldir}",f"{part}.stl")
 
                 
 def repair_stl(parts: list, stldir: str):

@@ -115,7 +115,7 @@ class CacheMGR:
             try:
                 r = requests.get(url=f'https://www.ldraw.org/library/official/parts/{model_number}.dat')
                 assert r.status_code == 200, 'Brick Acquisition Error'
-                with open(f'model_cache/{model_number}.dat', 'w+') as f:
+                with open(os.path.join('model_cache',f'{model_number}.dat'), 'w+') as f:
                     f.write(r.text)
                 self.cached_parts.append(model_number)
                 self.cache_list.write(f'{model_number}\n')
@@ -124,7 +124,7 @@ class CacheMGR:
                 try:
                     r = requests.get(url=f'https://www.ldraw.org/library/unofficial/parts/{model_number}.dat')
                     assert r.status_code == 200, 'Brick Acquisition Error'
-                    with open(f'model_cache/{model_number}.dat', 'w+') as f:
+                    with open(os.path.join('model_cache',f'{model_number}.dat'), 'w+') as f:
                         f.write(r.text)
                     self.cached_parts.append(model_number)
                     self.cache_list.write(f'{model_number}\n')
