@@ -21,7 +21,7 @@ def tweak_parts(parts: list, stldir : str):
         path = os.path.join(stldir, f"{part}.stl")
         if os.path.exists(path):
             if os.path.getsize(path) > 4:
-                stlconverter.tweak_file(os.path.join(f"{stldir}",f"{part}.stl")
+                stlconverter.tweak_file(os.path.join(f"{stldir}",f"{part}.stl"))
 
                 
 def repair_stl(parts: list, stldir: str):
